@@ -1,0 +1,14 @@
+{
+  "input_dir": "inputs",
+  "output_dir": "outputs",
+  "output_mode": "segment",
+  "timestamp_format": "%Y%m%d_%H%M%S",
+  "device_preference": "auto",
+  "supported_extensions": [
+    ".wav",
+    ".mp3",
+    ".flac",
+    ".m4a",
+    ".ogg"
+  ]
+}

@@ -1,0 +1,12 @@
+# Python cache
+__pycache__/
+
+# Virtual environment
+venv/
+
+# Keep directories but ignore generated files
+inputs/*
+!inputs/.gitkeep
+
+outputs/*
+!outputs/.gitkeep
