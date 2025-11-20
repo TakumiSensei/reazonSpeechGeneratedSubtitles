@@ -38,6 +38,8 @@
 | `output_mode` | `segment` | `segment` はモデルの発話セグメント単位で字幕化、`subword` はサブワードごとの細切れ字幕を生成。 |
 | `timestamp_format` | `%Y%m%d_%H%M%S` | 出力ファイル名に付与される日時フォーマット（`datetime.strftime` 準拠）。 |
 | `device_preference` | `auto` | `auto`/`cuda`/`cpu` で推論デバイスを指定。`cuda` 選択時に GPU が無い場合は CPU へ自動フォールバック。 |
+| `extend_segment_end` | `false` | SRT 出力時にセグメントの終了時刻を延長するかどうか。 |
+| `extend_segment_end_seconds` | `0.5` | 延長する場合に終了時刻を後ろへどれだけ（秒）ずらすか。次のセグメント開始を超えません。 |
 | `supported_extensions` | `[".wav", ".mp3", ".flac", ".m4a", ".ogg"]` | 処理対象とする拡張子一覧。`.` 付き小文字で比較され、重複は除去されます。 |
 
 `config.json` を調整した後は、`inputs/` に音声を置いて再度 `python transcribe_nemo.py` を実行するだけで設定の違いを反映した字幕ファイルを生成できます。

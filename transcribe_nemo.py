@@ -62,6 +62,8 @@ class AppConfig:
     output_mode: str = "segment"  # or "subword"
     timestamp_format: str = "%Y%m%d_%H%M%S"
     device_preference: str = "auto"  # auto/cuda/cpu
+    extend_segment_end: bool = False
+    extend_segment_end_seconds: float = 0.5
     supported_extensions: list[str] = field(
         default_factory=lambda: [".wav", ".mp3", ".flac", ".m4a", ".ogg"]
     )
@@ -74,6 +76,13 @@ class AppConfig:
         self.device_preference = self.device_preference.lower()
         if self.device_preference not in {"auto", "cuda", "cpu"}:
             self.device_preference = "auto"
+
+        try:
+            self.extend_segment_end_seconds = max(
+                float(self.extend_segment_end_seconds), 0.0
+            )
+        except (TypeError, ValueError):
+            self.extend_segment_end_seconds = 0.5
 
         self.supported_extensions = sorted(
             {ext.lower() if ext.startswith(".") else f".{ext.lower()}"
@@ -108,9 +117,40 @@ def normalize_text(text: str) -> str:
     return text.replace("\u2581", " ").strip()
 
 
-def segments_to_srt(transcription: TranscribeResult) -> str:
+def _extend_segment_end_times(
+    segments: Sequence[Segment], pad_seconds: float
+) -> list[Segment]:
+    if not segments or pad_seconds <= 0:
+        return list(segments)
+
+    adjusted: list[Segment] = []
+    last_idx = len(segments) - 1
+
+    for idx, segment in enumerate(segments):
+        candidate_end = segment.end_seconds + pad_seconds
+        if idx < last_idx:
+            next_start = segments[idx + 1].start_seconds
+            end_seconds = candidate_end if candidate_end < next_start else segment.end_seconds
+        else:
+            end_seconds = candidate_end
+
+        adjusted.append(
+            Segment(
+                start_seconds=segment.start_seconds,
+                end_seconds=end_seconds,
+                text=segment.text,
+            )
+        )
+
+    return adjusted
+
+
+def segments_to_srt(transcription: TranscribeResult, *, extend_end_seconds: float = 0.0) -> str:
     lines: list[str] = []
-    for idx, segment in enumerate(transcription.segments, 1):
+    segments: Sequence[Segment] = transcription.segments or []
+    segments = _extend_segment_end_times(segments, extend_end_seconds)
+
+    for idx, segment in enumerate(segments, 1):
         text = normalize_text(segment.text) or "(no speech)"
         lines.append(str(idx))
         lines.append(
@@ -304,7 +344,12 @@ def main():
         if config.output_mode == "subword":
             srt_content = subwords_to_srt(result.subwords)
         else:
-            srt_content = segments_to_srt(result)
+            extend_seconds = (
+                config.extend_segment_end_seconds if config.extend_segment_end else 0.0
+            )
+            srt_content = segments_to_srt(
+                result, extend_end_seconds=extend_seconds
+            )
         output_path = build_output_path(audio_path, output_dir, config.timestamp_format)
         output_path.write_text(srt_content, encoding="utf-8")
         print(f" -> {output_path} [{chunk_count} chunk(s)]")
