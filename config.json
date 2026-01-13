@@ -5,7 +5,7 @@
   "timestamp_format": "%Y%m%d_%H%M%S",
   "device_preference": "auto",
   "extend_segment_end": true,
-  "extend_segment_end_seconds": 0.5,
+  "extend_segment_end_seconds": 0.8,
   "supported_extensions": [
     ".wav",
     ".mp3",
