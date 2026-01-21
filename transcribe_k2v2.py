@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import signal
 import json
+import os
 from dataclasses import dataclass, field, fields
 from datetime import datetime
 from pathlib import Path
@@ -20,6 +21,36 @@ def _ensure_signal_attrs():
     for name in ("SIGKILL",):
         if not hasattr(signal, name):
             setattr(signal, name, fallback)
+
+
+def _ensure_dll_paths():
+    """Add nvidia/torch DLL paths to search path on Windows."""
+    if os.name != "nt":
+        return
+        
+    import sys
+    from pathlib import Path
+
+    venv_path = Path(sys.prefix)
+    paths = [
+        venv_path / "Lib" / "site-packages" / "torch" / "lib",
+        venv_path / "Lib" / "site-packages" / "nvidia" / "cublas" / "bin",
+        venv_path / "Lib" / "site-packages" / "nvidia" / "cudnn" / "bin",
+        venv_path / "Lib" / "site-packages" / "nvidia" / "cuda_runtime" / "bin",
+        venv_path / "Lib" / "site-packages" / "nvidia" / "curand" / "bin",
+        venv_path / "Lib" / "site-packages" / "nvidia" / "cufft" / "bin",
+    ]
+
+    for p in paths:
+        if p.exists():
+            os.environ["PATH"] = str(p) + os.pathsep + os.environ["PATH"]
+            if hasattr(os, "add_dll_directory"):
+                try:
+                    os.add_dll_directory(str(p))
+                except Exception:
+                    pass
+
+_ensure_dll_paths()
 
 
 def _ensure_ml_dtypes():

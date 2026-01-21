@@ -35,11 +35,12 @@ ReazonSpeechのモデルを利用して、フォルダ内の音声ファイル�
 ReazonSpeechのNeMoモデルを使用します。
 
 - **特徴**: 高精度な認識が可能。セグメント情報の取得がネイティブに対応。
-- **実行方法**:
-  ```powershell
-  # 仮想環境内で実行
-  python transcribe_nemo.py
-  ```
+  - **実行方法**:
+    - 付属のバッチファイル **`run_nemo.bat`** を実行するだけ（推奨）。
+    - または仮想環境内で:
+      ```powershell
+      python transcribe_nemo.py
+      ```
 
 ### 2. K2 V2モデルを使用する場合 (`transcribe_k2v2.py`)
 
