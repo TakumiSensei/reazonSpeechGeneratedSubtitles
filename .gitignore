@@ -10,3 +10,6 @@ inputs/*
 
 outputs/*
 !outputs/.gitkeep
+
+build/*
+dist/*

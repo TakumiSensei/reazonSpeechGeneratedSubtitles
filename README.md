@@ -69,9 +69,11 @@ ReazonSpeechのNeMoモデルを使用します。
 | `output_mode` | `segment` | `segment`: 発話区間ごと（K2の場合はチャンクごと）<br>`subword`: サブワード単位 |
 | `timestamp_format` | `%Y%m%d_%H%M%S` | 出力ファイル名の日時フォーマット |
 | `device_preference` | `auto` | `auto`/`cuda`/`cpu` 推論デバイスの指定 |
-| `extend_segment_end` | `false` | SRT出力時にセグメントの終了時刻を延長するかどうか。 |
-| `extend_segment_end_seconds` | `0.5` | 延長する場合に終了時刻を後ろへどれだけ（秒）ずらすか。次のセグメント開始を超えません。 |
-| `supported_extensions` | `.wav`, `.mp3`等 | 対象とする拡張子リスト |
+| `extend_segment_end` | `true` | SRT出力時にセグメントの終了時刻を延長するかどうか。 |
+| `extend_segment_end_seconds` | `0.8` | 延長する場合に終了時刻を後ろへどれだけ（秒）ずらすか。次のセグメント開始を超えません。 |
+| `supported_extensions` | `.wav`, `.mp3`等 | 対象とする拡張子リスト（`.wav`, `.mp3`, `.flac`, `.m4a`, `.ogg`） |
+| `remove_period` | `false` | 書き起こし文末の句点（。）を削除するかどうか。 |
+| `model_type` | `k2v2` | （EXE版用）起動時に使用するモデル（`k2v2` または `nemo`）を指定。 |
 
 ---
 

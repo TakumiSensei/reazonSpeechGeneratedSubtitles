@@ -12,5 +12,7 @@
     ".flac",
     ".m4a",
     ".ogg"
-  ]
+  ],
+  "remove_period": false,
+  "model_type": "k2v2"
 }
