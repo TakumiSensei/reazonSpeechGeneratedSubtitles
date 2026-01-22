@@ -74,10 +74,27 @@ def _ensure_ml_dtypes():
         if not hasattr(ml_dtypes, name):
             setattr(ml_dtypes, name, alias)
 
+def _patch_torch_jit():
+    """Disable TorchScript JIT compilation in frozen environments."""
+    if not getattr(sys, 'frozen', False):
+        return
+
+    try:
+        import torch
+        # Patch jit.script to be a no-op decorator
+        def no_op(obj, *args, **kwargs):
+            return obj
+        
+        torch.jit.script = no_op
+        torch.jit.script_method = no_op
+    except ImportError:
+        pass
+
 # Run environment setup immediately on import
 _ensure_dll_paths()
 _ensure_signal_attrs()
 _ensure_ml_dtypes()
+_patch_torch_jit()
 
 
 DEFAULT_SUBWORD_DURATION = 0.3
@@ -89,6 +106,13 @@ class Segment:
     start_seconds: float
     end_seconds: float
     text: str
+
+@dataclass
+class Subword:
+    """Mock Subword class to unify interface with NeMo based logic."""
+    seconds: float
+    token_id: int
+    token: str
 
 @dataclass
 class AppConfig:

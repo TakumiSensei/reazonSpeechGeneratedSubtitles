@@ -21,6 +21,8 @@ pyinstaller --noconfirm --clean ^
  --collect-all="resampy" ^
  --collect-all="sherpa_onnx" ^
  --collect-all="nvidia" ^
+ --collect-all="lightning_fabric" ^
+ --collect-all="pytorch_lightning" ^
  reazon_app.py
 
 if %ERRORLEVEL% NEQ 0 (
