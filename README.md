@@ -14,17 +14,17 @@ ReazonSpeechのモデルを利用して、フォルダ内の音声ファイル�
 
 ## 🔧 環境構築
 
-1. **前提**: Python 3.10 以降、Git、CUDA対応GPU（任意）、FFmpeg/SoundFileなどのオーディオ環境。
-2. **仮想環境の作成**:
+詳細な手順については **[SETUP.md](SETUP.md)** を参照してください。
+
+1. **前提**: Python 3.10+, Git, FFmpeg, CUDA (GPU利用時)
+2. **準備**:
    ```powershell
-   cd C:\workspace\ReazonSpeech
+   git clone --recursive https://github.com/TakumiSensei/reazonSpeechGeneratedSubtitles.git
+   cd reazonSpeechGeneratedSubtitles
    python -m venv venv
    .\venv\Scripts\activate
-   python -m pip install --upgrade pip
+   pip install -r requirements.txt  # または SETUP.md の手順に従う
    ```
-3. **ライブラリのインストール**:
-   - リポジトリに同梱されているパッケージ等をインストールしてください。
-   - `reazonspeech` ライブラリが必要です。
 
 ---
 

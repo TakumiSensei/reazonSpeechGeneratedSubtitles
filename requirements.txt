@@ -1,0 +1,5 @@
+reazonspeech
+librosa
+numpy
+soundfile
+# nemo_toolkit[asr]  # Uncomment if using NeMo model
